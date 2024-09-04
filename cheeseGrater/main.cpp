@@ -1,68 +1,66 @@
-// minimizes the number of header files that are included in Windows.h
-#define WIN32_LEAN_AND_MEAN
-
-#include <Windows.h>
-#include <shellapi.h>  // CommandLineToArgW
-
-// min/max macros conflict; only use std::min and std::max from <algorithm>
-#if defined(min)
-#undef min
-#endif
-
-#if defined(max)
-#undef max
-#endif
-
-#if defined(CreateWindow)
-#undef CreateWindow
-#endif
-
-#include <wrl.h>  // Microsoft::WRL::ComPtr<>
-using namespace Microsoft::WRL;
-
-#include <d3dx12.h>
-#include <d3d12.h>
-#include <dxgi1_6.h>
-#include <d3dcompiler.h>
-#include <DirectXMath.h>
+//// minimizes the number of header files that are included in Windows.h
+//#define WIN32_LEAN_AND_MEAN
+//
+//#include <Windows.h>
+//#include <shellapi.h>  // CommandLineToArgW
+//
+//// min/max macros conflict; only use std::min and std::max from <algorithm>
+//#if defined(min)
+//#undef min
+//#endif
+//
+//#if defined(max)
+//#undef max
+//#endif
+//
+//#if defined(CreateWindow)
+//#undef CreateWindow
+//#endif
+//
+//#include <wrl.h>  // Microsoft::WRL::ComPtr<>
+//using namespace Microsoft::WRL;
+//
+//#include <d3dx12.h>
+//#include <d3d12.h>
+//#include <dxgi1_6.h>
+//#include <d3dcompiler.h>
+//#include <DirectXMath.h>
 
 #include <algorithm>
 #include <cassert>
 #include <chrono>
 
-#include <helpers.hpp>
-
-const uint8_t g_numFrames = 3;  // swap chain buffers
+//const uint8_t g_numFrames = 3;  // swap chain buffers
 bool g_useWarp = false;
 
-uint32_t g_clientWidth = 1280;
-uint32_t g_clientHeight = 720;
+//uint32_t g_clientWidth = 1280;
+//uint32_t g_clientHeight = 720;
 
 bool g_isInitialized = false;
 
-HWND g_hWnd;
-RECT g_windowRect;  // saves window size before full screen
+//HWND g_hWnd;
+//RECT g_windowRect;  // saves window size before full screen
 
-ComPtr<ID3D12Device2> g_device;
-ComPtr<ID3D12CommandQueue> g_commandQueue;
-ComPtr<IDXGISwapChain4> g_swapChain;
-ComPtr<ID3D12Resource> g_backBuffers[g_numFrames];
+//ComPtr<ID3D12Device2> g_device;
+//ComPtr<ID3D12CommandQueue> g_commandQueue;
+//ComPtr<IDXGISwapChain4> g_swapChain;
+//ComPtr<ID3D12Resource> g_backBuffers[g_numFrames];
 ComPtr<ID3D12GraphicsCommandList> g_commandList;
 ComPtr<ID3D12CommandAllocator> g_commandAllocators[g_numFrames];
 ComPtr<ID3D12DescriptorHeap> g_RTVDescriptorHeap;
 
 UINT g_RTVDescriptorSize;
-UINT g_currentBackBufferIndex;
+//UINT g_currentBackBufferIndex;
 
 // synchronization
-ComPtr<ID3D12Fence> g_fence;
-uint64_t g_fenceValue = 0;
-uint64_t g_frameFenceValues[g_numFrames] = { };
-HANDLE g_fenceEvent;
+//ComPtr<ID3D12Fence> g_fence;
+//uint64_t g_fenceValue = 0;
+//uint64_t g_frameFenceValues[g_numFrames] = { };
+//HANDLE g_fenceEvent;
 
-bool g_vSync = true;
+//bool g_vSync = true;
 bool g_tearingSupported = false;
-bool g_fullScreen = false;
+//bool g_fullScreen = false;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -224,20 +222,20 @@ ComPtr<ID3D12Device2> CreateDevice(ComPtr<IDXGIAdapter4> adapter)
 	return d3d12Device2;
 }
 
-ComPtr<ID3D12CommandQueue> CreateCommandQueue(ComPtr<ID3D12Device2> device, D3D12_COMMAND_LIST_TYPE type)
-{
-	ComPtr<ID3D12CommandQueue> commandQueue;
-
-	D3D12_COMMAND_QUEUE_DESC desc = { };
-	desc.Type = type;
-	desc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
-	desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-	desc.NodeMask = 0;
-
-	ThrowIfFailed(device->CreateCommandQueue(&desc, IID_PPV_ARGS(&commandQueue)));
-
-	return commandQueue;
-}
+//ComPtr<ID3D12CommandQueue> CreateCommandQueue(ComPtr<ID3D12Device2> device, D3D12_COMMAND_LIST_TYPE type)
+//{
+//	ComPtr<ID3D12CommandQueue> commandQueue;
+//
+//	D3D12_COMMAND_QUEUE_DESC desc = { };
+//	desc.Type = type;
+//	desc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
+//	desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+//	desc.NodeMask = 0;
+//
+//	ThrowIfFailed(device->CreateCommandQueue(&desc, IID_PPV_ARGS(&commandQueue)));
+//
+//	return commandQueue;
+//}
 
 bool CheckTearingSupport()
 {
@@ -322,69 +320,69 @@ void UpdateRenderTargetViews(ComPtr<ID3D12Device2> device, ComPtr<IDXGISwapChain
 	}
 }
 
-ComPtr<ID3D12CommandAllocator> CreateCommandAllocator(ComPtr<ID3D12Device2> device, D3D12_COMMAND_LIST_TYPE type)
-{
-	ComPtr<ID3D12CommandAllocator> commandAllocator;
+//ComPtr<ID3D12CommandAllocator> CreateCommandAllocator(ComPtr<ID3D12Device2> device, D3D12_COMMAND_LIST_TYPE type)
+//{
+//	ComPtr<ID3D12CommandAllocator> commandAllocator;
+//
+//	ThrowIfFailed(device->CreateCommandAllocator(type, IID_PPV_ARGS(&commandAllocator)));
+//	
+//	return commandAllocator;
+//}
 
-	ThrowIfFailed(device->CreateCommandAllocator(type, IID_PPV_ARGS(&commandAllocator)));
-	
-	return commandAllocator;
-}
+//ComPtr<ID3D12GraphicsCommandList> CreateCommandList(ComPtr<ID3D12Device2> device, ComPtr<ID3D12CommandAllocator> commandAllocator,
+//	D3D12_COMMAND_LIST_TYPE type)
+//{
+//	ComPtr<ID3D12GraphicsCommandList> commandList;
+//
+//	ThrowIfFailed(device->CreateCommandList(0, type, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)));
+//	ThrowIfFailed(commandList->Close());
+//
+//	return commandList;
+//}
 
-ComPtr<ID3D12GraphicsCommandList> CreateCommandList(ComPtr<ID3D12Device2> device, ComPtr<ID3D12CommandAllocator> commandAllocator,
-	D3D12_COMMAND_LIST_TYPE type)
-{
-	ComPtr<ID3D12GraphicsCommandList> commandList;
+//ComPtr<ID3D12Fence> CreateFence(ComPtr<ID3D12Device2> device)
+//{
+//	ComPtr<ID3D12Fence> fence;
+//
+//	ThrowIfFailed(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)));
+//
+//	return fence;
+//}
 
-	ThrowIfFailed(device->CreateCommandList(0, type, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)));
-	ThrowIfFailed(commandList->Close());
+//HANDLE CreateEventHandle()
+//{
+//	HANDLE fenceEvent;
+//
+//	fenceEvent = ::CreateEventW(NULL, FALSE, FALSE, NULL);
+//	assert(fenceEvent && "Failed to create fence event");
+//
+//	return fenceEvent;
+//}
 
-	return commandList;
-}
+//uint64_t Signal(ComPtr<ID3D12CommandQueue> commandQueue, ComPtr<ID3D12Fence> fence, uint64_t& fenceValue)
+//{
+//	uint64_t fenceValueForSignal = ++fenceValue;
+//
+//	ThrowIfFailed(commandQueue->Signal(fence.Get(), fenceValueForSignal));
+//
+//	return fenceValueForSignal;
+//}
 
-ComPtr<ID3D12Fence> CreateFence(ComPtr<ID3D12Device2> device)
-{
-	ComPtr<ID3D12Fence> fence;
+//void WaitForFenceValue(ComPtr<ID3D12Fence> fence, uint64_t fenceValue, HANDLE fenceEvent,
+//	std::chrono::milliseconds duration = std::chrono::milliseconds::max())
+//{
+//	if (fence->GetCompletedValue() < fenceValue)
+//	{
+//		ThrowIfFailed(fence->SetEventOnCompletion(fenceValue, fenceEvent));
+//		::WaitForSingleObject(fenceEvent, static_cast<DWORD>(duration.count()));
+//	}
+//}
 
-	ThrowIfFailed(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)));
-
-	return fence;
-}
-
-HANDLE CreateEventHandle()
-{
-	HANDLE fenceEvent;
-
-	fenceEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
-	assert(fenceEvent && "Failed to create fence event");
-
-	return fenceEvent;
-}
-
-uint64_t Signal(ComPtr<ID3D12CommandQueue> commandQueue, ComPtr<ID3D12Fence> fence, uint64_t& fenceValue)
-{
-	uint64_t fenceValueForSignal = ++fenceValue;
-
-	ThrowIfFailed(commandQueue->Signal(fence.Get(), fenceValueForSignal));
-
-	return fenceValueForSignal;
-}
-
-void WaitForFenceValue(ComPtr<ID3D12Fence> fence, uint64_t fenceValue, HANDLE fenceEvent,
-	std::chrono::milliseconds duration = std::chrono::milliseconds::max())
-{
-	if (fence->GetCompletedValue() < fenceValue)
-	{
-		ThrowIfFailed(fence->SetEventOnCompletion(fenceValue, fenceEvent));
-		::WaitForSingleObject(fenceEvent, static_cast<DWORD>(duration.count()));
-	}
-}
-
-void Flush(ComPtr<ID3D12CommandQueue> commandQueue, ComPtr<ID3D12Fence> fence, uint64_t& fenceValue, HANDLE fenceEvent)
-{
-	uint64_t fenceValueForSignal = Signal(commandQueue, fence, fenceValue);
-	WaitForFenceValue(fence, fenceValueForSignal, fenceEvent);
-}
+//void Flush(ComPtr<ID3D12CommandQueue> commandQueue, ComPtr<ID3D12Fence> fence, uint64_t& fenceValue, HANDLE fenceEvent)
+//{
+//	uint64_t fenceValueForSignal = Signal(commandQueue, fence, fenceValue);
+//	WaitForFenceValue(fence, fenceValueForSignal, fenceEvent);
+//}
 
 constexpr size_t BUFFER_SIZE = 128;
 void Update()
@@ -455,67 +453,67 @@ void Render()
 	}
 }
 
-void Resize(uint32_t width, uint32_t height)
-{
-	if (g_clientWidth != width || g_clientHeight != height)
-	{
-		g_clientWidth = std::max(1u, width);
-		g_clientHeight = std::max(1u, height);
+//void Resize(uint32_t width, uint32_t height)
+//{
+//	if (g_clientWidth != width || g_clientHeight != height)
+//	{
+//		g_clientWidth = std::max(1u, width);
+//		g_clientHeight = std::max(1u, height);
+//
+//		Flush(g_commandQueue, g_fence, g_fenceValue, g_fenceEvent);
+//
+//		for (int i = 0; i < g_numFrames; i++)
+//		{
+//			g_backBuffers[i].Reset();
+//			g_frameFenceValues[i] = g_frameFenceValues[g_currentBackBufferIndex];
+//		}
+//
+//		DXGI_SWAP_CHAIN_DESC swapChainDesc = { };
+//		ThrowIfFailed(g_swapChain->GetDesc(&swapChainDesc));
+//		ThrowIfFailed(g_swapChain->ResizeBuffers(g_numFrames, g_clientWidth, g_clientHeight, swapChainDesc.BufferDesc.Format, swapChainDesc.Flags));
+//		g_currentBackBufferIndex = g_swapChain->GetCurrentBackBufferIndex();
+//
+//		UpdateRenderTargetViews(g_device, g_swapChain, g_RTVDescriptorHeap);
+//	}
+//}
 
-		Flush(g_commandQueue, g_fence, g_fenceValue, g_fenceEvent);
-
-		for (int i = 0; i < g_numFrames; i++)
-		{
-			g_backBuffers[i].Reset();
-			g_frameFenceValues[i] = g_frameFenceValues[g_currentBackBufferIndex];
-		}
-
-		DXGI_SWAP_CHAIN_DESC swapChainDesc = { };
-		ThrowIfFailed(g_swapChain->GetDesc(&swapChainDesc));
-		ThrowIfFailed(g_swapChain->ResizeBuffers(g_numFrames, g_clientWidth, g_clientHeight, swapChainDesc.BufferDesc.Format, swapChainDesc.Flags));
-		g_currentBackBufferIndex = g_swapChain->GetCurrentBackBufferIndex();
-
-		UpdateRenderTargetViews(g_device, g_swapChain, g_RTVDescriptorHeap);
-	}
-}
-
-void SetFullScreen(bool fullscreen)
-{
-	if (g_fullScreen == fullscreen)
-	{
-		return;
-	}
-
-	g_fullScreen = fullscreen;
-
-	if (g_fullScreen)
-	{
-		// save current window dimensions
-		::GetWindowRect(g_hWnd, &g_windowRect);
-	
-		// remove window decorations and set style to "borderless window"
-		UINT windowStyle = WS_OVERLAPPEDWINDOW & ~(WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
-		::SetWindowLongPtr(g_hWnd, GWL_STYLE, windowStyle);
-
-		HMONITOR hMonitor = ::MonitorFromWindow(g_hWnd, MONITOR_DEFAULTTONEAREST);
-		MONITORINFOEX monitorInfo = { };
-		monitorInfo.cbSize = sizeof(MONITORINFOEX);
-		::GetMonitorInfo(hMonitor, &monitorInfo);
-
-		::SetWindowPos(g_hWnd, HWND_TOP, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top,
-			monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top,
-			SWP_FRAMECHANGED | SWP_NOACTIVATE);
-		::ShowWindow(g_hWnd, SW_MAXIMIZE);
-	}
-	else
-	{
-		// restore all window decorators
-		::SetWindowLong(g_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
-		::SetWindowPos(g_hWnd, HWND_NOTOPMOST, g_windowRect.left, g_windowRect.top,
-			g_windowRect.right - g_windowRect.left, g_windowRect.bottom - g_windowRect.top, SWP_FRAMECHANGED | SWP_NOACTIVATE);
-		::ShowWindow(g_hWnd, SW_NORMAL);
-	}
-}
+//void SetFullScreen(bool fullscreen)
+//{
+//	if (g_fullScreen == fullscreen)
+//	{
+//		return;
+//	}
+//
+//	g_fullScreen = fullscreen;
+//
+//	if (g_fullScreen)
+//	{
+//		// save current window dimensions
+//		::GetWindowRect(g_hWnd, &g_windowRect);
+//	
+//		// remove window decorations and set style to "borderless window"
+//		UINT windowStyle = WS_OVERLAPPEDWINDOW & ~(WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
+//		::SetWindowLongPtr(g_hWnd, GWL_STYLE, windowStyle);
+//
+//		HMONITOR hMonitor = ::MonitorFromWindow(g_hWnd, MONITOR_DEFAULTTONEAREST);
+//		MONITORINFOEX monitorInfo = { };
+//		monitorInfo.cbSize = sizeof(MONITORINFOEX);
+//		::GetMonitorInfo(hMonitor, &monitorInfo);
+//
+//		::SetWindowPos(g_hWnd, HWND_TOP, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top,
+//			monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top,
+//			SWP_FRAMECHANGED | SWP_NOACTIVATE);
+//		::ShowWindow(g_hWnd, SW_MAXIMIZE);
+//	}
+//	else
+//	{
+//		// restore all window decorators
+//		::SetWindowLong(g_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+//		::SetWindowPos(g_hWnd, HWND_NOTOPMOST, g_windowRect.left, g_windowRect.top,
+//			g_windowRect.right - g_windowRect.left, g_windowRect.bottom - g_windowRect.top, SWP_FRAMECHANGED | SWP_NOACTIVATE);
+//		::ShowWindow(g_hWnd, SW_NORMAL);
+//	}
+//}
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
