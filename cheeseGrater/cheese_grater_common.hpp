@@ -20,7 +20,6 @@
 #endif
 
 #include <wrl.h>  // Microsoft::WRL::ComPtr<>
-using namespace Microsoft::WRL;  // todo: maybe not so good idea?
 
 #include <d3dx12.h>
 #include <d3d12.h>

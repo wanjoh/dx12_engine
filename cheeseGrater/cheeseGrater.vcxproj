@@ -46,8 +46,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)\Build\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\</IntDir>
-    <IncludePath>D:\projekti\DirectX-Headers\include\directx;D:\projekti\cheeseGrater\cheeseGrater;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.22621.0\um;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.22621.0\shared;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.22621.0\um\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\ucenje\projekti\DirectX-Headers\include\directx;$(SolutionDir)\cheeseGrater;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.26100.0\shared;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.26100.0\um;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.26100.0\um\x64;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.26100.0\winrt;$(LibraryWPath)</LibraryWPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -61,8 +62,14 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;dxguid.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>5.1</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -85,13 +92,25 @@
     <ClCompile Include="command_queue.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
+    <FxCompile Include="pixel_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <ClCompile Include="rotatable_cube.cpp" />
+    <FxCompile Include="vertex_shader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application.hpp" />
     <ClInclude Include="command_queue.hpp" />
     <ClInclude Include="cheese_grater_common.hpp" />
+    <ClInclude Include="events.hpp" />
     <ClInclude Include="game.hpp" />
+    <ClInclude Include="key_codes.hpp" />
+    <ClInclude Include="rotatable_cube.hpp" />
     <ClInclude Include="window.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
